@@ -1,4 +1,9 @@
 ____________________________________________________________________________
+[  8322] By: autrijus                              on 2003/10/02  23:59:50
+        Log: * This be 1.02.
+             * upgrade to Unicode Database 4.0.0.
+	   ! Makefile.PL lib/Unicode/EastAsianWidth.pm
+____________________________________________________________________________
 [   989] By: autrijus                              on 2002/09/22  03:01:10
         Log: * This be 1.01.
              * POD NAME fixes, spelling nits, &c.
@@ -9,15 +14,12 @@ ____________________________________________________________________________
         Log: * typo.
 	   ! lib/Unicode/EastAsianWidth.pm
 ____________________________________________________________________________
-[   950] By: autrijus                              on 2002/09/20  04:48:59
-        Log: * changes and signautre.
-	   + Changes SIGNATURE
-____________________________________________________________________________
 [   949] By: autrijus                              on 2002/09/20  04:46:49
         Log: * Last-minute fix for 5.6 compatibility.
-	   ! Makefile.PL lib/Unicode/EastAsianWidth.pm t/1-basic.t
+	   ! Makefile.PL lib/Unicode/EastAsianWidth.pm
+	   ! t/1-basic.t
 ____________________________________________________________________________
 [   948] By: autrijus                              on 2002/09/20  04:33:00
         Log: * 1.00, the initial release.
-	   + MANIFEST Makefile.PL README lib/Unicode/EastAsianWidth.pm
-	   + t/1-basic.t
+	   + MANIFEST Makefile.PL README
+	   + lib/Unicode/EastAsianWidth.pm t/1-basic.t

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # $File: //member/autrijus/Unicode-EastAsianWidth/Makefile.PL $ $Author: autrijus $
-# $Revision: #3 $ $Change: 989 $ $DateTime: 2002/09/22 03:01:10 $
+# $Revision: #4 $ $Change: 8322 $ $DateTime: 2003/10/02 23:59:50 $
 
 use 5.006;
 use ExtUtils::MakeMaker;
@@ -13,12 +13,6 @@ WriteMakefile(
     NAME		=> 'Unicode::EastAsianWidth',
     VERSION_FROM	=> 'lib/Unicode/EastAsianWidth.pm', 
     DISTNAME		=> 'Unicode-EastAsianWidth',
-    BINARY_LOCATION	=> 'x86/Unicode-EastAsianWidth.tar.gz',
-
-    dist		=> {
-        COMPRESS	=> 'gzip -9',
-        SUFFIX		=> '.gz',
-    },
 );
 
 sub _build_pm {
@@ -29,12 +23,12 @@ sub _build_pm {
     }
 
     unless (-e $file) {
-	warn "Cannot find unicore/EastAsanWidth.txt, using default (v3.2.0)\n";
+	warn "Cannot find unicore/EastAsanWidth.txt, using default (v4.0.0)\n";
 	return;
     }
 
     unless (open EAW, $file) {
-	warn "Cannot read $file, falling back to default (v3.2.0)\n";
+	warn "Cannot read $file, falling back to default (v4.0.0)\n";
 	return;
     }
 
@@ -62,7 +56,7 @@ sub _build_pm {
 
     my $out;
     unless (open PM, 'lib/Unicode/EastAsianWidth.pm') {
-	warn "Cannot read module ($!), falling back to default (v3.2.0)\n";
+	warn "Cannot read module ($!), falling back to default (v4.0.0)\n";
 	return;
     }
 
@@ -85,7 +79,7 @@ sub _build_pm {
 
     chmod 0644, 'lib/Unicode/EastAsianWidth.pm';
     unless (open PM, '>', 'lib/Unicode/EastAsianWidth.pm') {
-	warn "Cannot write to module ($!), falling back to default (v3.2.0)\n";
+	warn "Cannot write to module ($!), falling back to default (v4.0.0)\n";
 	return;
     }
 

@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.06.
+signed via the Module::Signature module, version 0.35.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,16 +14,17 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 72cf6d4b29469a5a16d818ec5ad9c35a99ffaa66 Changes
-SHA1 abe44b6694f0eb75936c4f2f5e484d44fc96f523 MANIFEST
-SHA1 eb2bc67b674fbdbc6a3aaaf38125335eb55c7c00 Makefile.PL
+SHA1 306ee1b55e16100ac0a44d53db9730de2504abbd Changes
+SHA1 9cbb03063c6c13c8a3f4fc1f63a6dd1ac6b0734a MANIFEST
+SHA1 21a85bb95de7d49f7d07398faa1cb967b828f6e6 META.yml
+SHA1 7b9bd76b9db9c69fc3c9892cf53d3d5a3ce69b3e Makefile.PL
 SHA1 a60622082a9d4c074202f562444a7c19cff20e14 README
-SHA1 ecbc1998d0bb7123059922353ddd7c68b484ea72 lib/Unicode/EastAsianWidth.pm
+SHA1 ce7d302df0febc3ca767234482beab43e7c512aa lib/Unicode/EastAsianWidth.pm
 SHA1 30eb820b4e9c16602dee73a44e0dfe64dd58e52b t/1-basic.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.7 (FreeBSD)
+Version: GnuPG v1.2.3 (FreeBSD)
 
-iD8DBQE9jTdAtLPdNzw1AaARAt3hAKCiz7Ylt8md5TiyuQY4SKeQ7RuBXACfapyn
-qcGqTjoQGiWNMPW//vS5QHY=
-=rm36
+iD8DBQE/fLvwtLPdNzw1AaARAgtoAKC3+eLBj5Lf8PG7oYoJmjbK8nxcvwCggxI5
+V7EU9WV1OCsDIOHs15klIXk=
+=qOgl
 -----END PGP SIGNATURE-----
