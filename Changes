@@ -1,0 +1,9 @@
+____________________________________________________________________________
+[   949] By: autrijus                              on 2002/09/20  04:46:49
+        Log: * Last-minute fix for 5.6 compatibility.
+	   ! Makefile.PL lib/Unicode/EastAsianWidth.pm t/1-basic.t
+____________________________________________________________________________
+[   948] By: autrijus                              on 2002/09/20  04:33:00
+        Log: * 1.00, the initial release.
+	   + MANIFEST Makefile.PL README lib/Unicode/EastAsianWidth.pm
+	   + t/1-basic.t

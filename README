@@ -1,0 +1,24 @@
+# $File: //member/autrijus/Apache-Session-BerkeleyDB/README $ $Author: autrijus $
+# $Revision: #2 $ $Change: 670 $ $DateTime: 2002/08/16 18:42:29 $
+
+This is the README file for Unicode::EastAsianWidth, a module providing
+East Asian Width properties to regular expressions.
+
+* Installation
+
+Unicode::EastAsianWidth uses the standard perl module install process:
+
+cpansign -v		# see SIGNATURE for details
+perl Makefile.PL
+make
+make test
+make install
+
+* Copyright
+
+Copyright 2002 by Autrijus Tang <autrijus@autrijus.org>.
+
+All rights reserved.  You can redistribute and/or modify
+this bundle under the same terms as Perl itself.
+
+See <http://www.perl.com/perl/misc/Artistic.html>.
