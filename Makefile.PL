@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # $File: //member/autrijus/Unicode-EastAsianWidth/Makefile.PL $ $Author: autrijus $
-# $Revision: #2 $ $Change: 949 $ $DateTime: 2002/09/20 04:46:49 $
+# $Revision: #3 $ $Change: 989 $ $DateTime: 2002/09/22 03:01:10 $
 
 use 5.006;
 use ExtUtils::MakeMaker;
@@ -13,7 +13,7 @@ WriteMakefile(
     NAME		=> 'Unicode::EastAsianWidth',
     VERSION_FROM	=> 'lib/Unicode/EastAsianWidth.pm', 
     DISTNAME		=> 'Unicode-EastAsianWidth',
-    BINARY_LOCATION	=> 'x86/Unicode-Map.tar.gz',
+    BINARY_LOCATION	=> 'x86/Unicode-EastAsianWidth.tar.gz',
 
     dist		=> {
         COMPRESS	=> 'gzip -9',
@@ -78,7 +78,7 @@ sub _build_pm {
 	        "END\n}\n";
     }
 
-    while (<PM>) { $out .= $_ and last if /^### END ###$/   }
+    while (<PM>) { $out .= $_ and last if /^### END ###$/ }
     while (<PM>) { $out .= $_ }
 
     close PM;

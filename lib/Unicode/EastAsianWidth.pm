@@ -1,8 +1,8 @@
 # $File: //member/autrijus/Unicode-EastAsianWidth/lib/Unicode/EastAsianWidth.pm $ $Author: autrijus $
-# $Revision: #2 $ $Change: 949 $DateTime: $
+# $Revision: #4 $ $Change: 989 $DateTime: $
 
 package Unicode::EastAsianWidth;
-$Unicode::EastAsianWidth::VERSION = '1.00';
+$Unicode::EastAsianWidth::VERSION = '1.01';
 
 use 5.006;
 use strict;
@@ -12,11 +12,11 @@ our $EastAsian;
 
 =head1 NAME
 
-Unicoe::EastAsianWidth - East Asian Width properties
+Unicode::EastAsianWidth - East Asian Width properties
 
 =head1 VERSION
 
-This document describes version 1.00 of Unicode::EastAsianWidth.
+This document describes version 1.01 of Unicode::EastAsianWidth.
 
 =head1 SYNOPSIS
 
@@ -34,7 +34,7 @@ This document describes version 1.00 of Unicode::EastAsianWidth.
 
 =head1 DESCRIPTION
 
-This module provide user-defined unicode properties that
+This module provide user-defined Unicode properties that
 deals with East Asian character's width status, as specified
 in L<http://www.unicode.org/unicode/reports/tr11/>.
 
