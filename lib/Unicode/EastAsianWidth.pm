@@ -1,96 +1,39 @@
-# $File: //member/autrijus/Unicode-EastAsianWidth/lib/Unicode/EastAsianWidth.pm $ $Author: autrijus $
-# $Revision: #5 $ $Change: 8322 $DateTime: $
-
 package Unicode::EastAsianWidth;
-$Unicode::EastAsianWidth::VERSION = '1.02';
+$Unicode::EastAsianWidth::VERSION = '1.10';
 
 use 5.006;
 use strict;
 use base 'Exporter';
 
-our $EastAsian;
-
-=head1 NAME
-
-Unicode::EastAsianWidth - East Asian Width properties
-
-=head1 VERSION
-
-This document describes version 1.02 of Unicode::EastAsianWidth,
-released October 3, 2003.
-
-=head1 SYNOPSIS
-
-    use Unicode::EastAsianWidth;
-
-    $_ = chr(0x2588); # FULL BLOCK, an ambiguous-width character
-
-    /\p{InEastAsianAmbiguous}/;	# true
-    /\p{InFullwidth}/;		# false
-
-    {
-	local $Unicode::EastAsianWidth::EastAsian = 1;
-	/\p{InFullwidth}/;	# true; only works on perl 5.8+
-    }
-
-=head1 DESCRIPTION
-
-This module provide user-defined Unicode properties that
-deals with East Asian character's width status, as specified
-in L<http://www.unicode.org/unicode/reports/tr11/>.
-
-It exports following functions to the caller's scope, to be
-used by Perl's Unicode matching system: C<InEastAsianFullwidth>,
-C<InEastAsianHalfwidth>, C<InEastAsianAmbiguous>, C<InEastAsianNarrow>
-C<InEastAsianWide>, C<InEastAsianNeutral>.
-
-According to the technical report listed above, two additional
-context-sensitive properties are exported: C<InFullwidth>
-(union of I<Fullwidth> and I<Wide>) and C<InHalfwidth> (union of
-Halfwidth, I<Narrow> and I<Neutral>).
-
-I<Ambiguous> characters are treated by default as part of
-C<InHalfwidth>, but you can modify this behaviour by assigning
-a true value to C<$Unicode::EastAsianWidth::EastAsian>.
-
-=head1 CAVEATS
-
-Setting C<$Unicode::EastAsianWidth::EastAsian> at run-time only
-works on Perl version 5.8 or above.  Perl 5.6 users must use
-a BEGIN block to set it before the C<use> statement:
-
-	BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
-	use Unicode::EastAsianWidth;
-
-=cut
+our $EastAsian = 0;
 
 sub InFullwidth {
     return InEastAsianFullwidth().
-	   InEastAsianWide().
-	   ($EastAsian ? InEastAsianAmbiguous() : '');
+           InEastAsianWide().
+           ($EastAsian ? InEastAsianAmbiguous() : '');
 }
 
 sub InHalfwidth {
     return InEastAsianHalfwidth().
-	   InEastAsianNarrow().
-	   InEastAsianNeutral().
-	   ($EastAsian ? '' : InEastAsianAmbiguous());
+           InEastAsianNarrow().
+           InEastAsianNeutral().
+           ($EastAsian ? '' : InEastAsianAmbiguous());
 }
 
 ### BEGIN ###
 our @EXPORT = qw(
 InEastAsianAmbiguous
-InEastAsianWide
 InEastAsianFullwidth
 InEastAsianHalfwidth
-InEastAsianNeutral
 InEastAsianNarrow
+InEastAsianNeutral
+InEastAsianWide
 InFullwidth
 InHalfwidth
 );
 
 sub InEastAsianAmbiguous {
-    return <<END;
+    return <<'END';
 00A1\t00A1
 00A4\t00A4
 00A7\t00A8
@@ -144,10 +87,8 @@ sub InEastAsianAmbiguous {
 02D8\t02DB
 02DD\t02DD
 02DF\t02DF
-0300\t0357
-035D\t036F
-0391\t03A1
-03A3\t03A9
+0300\t036F
+0391\t03A9
 03B1\t03C1
 03C3\t03C9
 0401\t0401
@@ -245,30 +186,42 @@ sub InEastAsianAmbiguous {
 266F\t266F
 273D\t273D
 2776\t277F
+F8FF\tF8FF
 FE00\tFE0F
 FFFD\tFFFD
 END
 }
+
 sub InEastAsianFullwidth {
-    return <<END;
+    return <<'END';
 3000\t3000
 FF01\tFF60
 FFE0\tFFE6
 END
 }
+
 sub InEastAsianHalfwidth {
-    return <<END;
+    return <<'END';
 20A9\t20A9
-FF61\tFFBE
-FFC2\tFFC7
-FFCA\tFFCF
-FFD2\tFFD7
-FFDA\tFFDC
+FF61\tFFDC
 FFE8\tFFEE
 END
 }
+
+sub InEastAsianNarrow {
+    return <<'END';
+0020\t007E
+00A2\t00A3
+00A5\t00A6
+00AC\t00AC
+00AF\t00AF
+27E6\t27EB
+2985\t2986
+END
+}
+
 sub InEastAsianNeutral {
-    return <<END;
+    return <<'END';
 0000\t001F
 007F\t00A0
 00A9\t00A9
@@ -310,8 +263,7 @@ sub InEastAsianNeutral {
 01D7\t01D7
 01D9\t01D9
 01DB\t01DB
-01DD\t0236
-0250\t0250
+01DD\t0250
 0252\t0260
 0262\t02C3
 02C5\t02C6
@@ -322,276 +274,14 @@ sub InEastAsianNeutral {
 02DC\t02DC
 02DE\t02DE
 02E0\t02FF
-0374\t0375
-037A\t037A
-037E\t037E
-0384\t038A
-038C\t038C
-038E\t0390
+0374\t0390
 03AA\t03B0
 03C2\t03C2
-03CA\t03CE
-03D0\t03FB
-0400\t0400
+03CA\t0400
 0402\t040F
 0450\t0450
-0452\t0486
-0488\t04CE
-04D0\t04F5
-04F8\t04F9
-0500\t050F
-0531\t0556
-0559\t055F
-0561\t0587
-0589\t058A
-0591\t05A1
-05A3\t05B9
-05BB\t05C4
-05D0\t05EA
-05F0\t05F4
-0600\t0603
-060C\t0615
-061B\t061B
-061F\t061F
-0621\t063A
-0640\t0658
-0660\t070D
-070F\t074A
-074D\t074F
-0780\t07B1
-0901\t0939
-093C\t094D
-0950\t0954
-0958\t0970
-0981\t0983
-0985\t098C
-098F\t0990
-0993\t09A8
-09AA\t09B0
-09B2\t09B2
-09B6\t09B9
-09BC\t09C4
-09C7\t09C8
-09CB\t09CD
-09D7\t09D7
-09DC\t09DD
-09DF\t09E3
-09E6\t09FA
-0A01\t0A03
-0A05\t0A0A
-0A0F\t0A10
-0A13\t0A28
-0A2A\t0A30
-0A32\t0A33
-0A35\t0A36
-0A38\t0A39
-0A3C\t0A3C
-0A3E\t0A42
-0A47\t0A48
-0A4B\t0A4D
-0A59\t0A5C
-0A5E\t0A5E
-0A66\t0A74
-0A81\t0A83
-0A85\t0A8D
-0A8F\t0A91
-0A93\t0AA8
-0AAA\t0AB0
-0AB2\t0AB3
-0AB5\t0AB9
-0ABC\t0AC5
-0AC7\t0AC9
-0ACB\t0ACD
-0AD0\t0AD0
-0AE0\t0AE3
-0AE6\t0AEF
-0AF1\t0AF1
-0B01\t0B03
-0B05\t0B0C
-0B0F\t0B10
-0B13\t0B28
-0B2A\t0B30
-0B32\t0B33
-0B35\t0B39
-0B3C\t0B43
-0B47\t0B48
-0B4B\t0B4D
-0B56\t0B57
-0B5C\t0B5D
-0B5F\t0B61
-0B66\t0B71
-0B82\t0B83
-0B85\t0B8A
-0B8E\t0B90
-0B92\t0B95
-0B99\t0B9A
-0B9C\t0B9C
-0B9E\t0B9F
-0BA3\t0BA4
-0BA8\t0BAA
-0BAE\t0BB5
-0BB7\t0BB9
-0BBE\t0BC2
-0BC6\t0BC8
-0BCA\t0BCD
-0BD7\t0BD7
-0BE7\t0BFA
-0C01\t0C03
-0C05\t0C0C
-0C0E\t0C10
-0C12\t0C28
-0C2A\t0C33
-0C35\t0C39
-0C3E\t0C44
-0C46\t0C48
-0C4A\t0C4D
-0C55\t0C56
-0C60\t0C61
-0C66\t0C6F
-0C82\t0C83
-0C85\t0C8C
-0C8E\t0C90
-0C92\t0CA8
-0CAA\t0CB3
-0CB5\t0CB9
-0CBC\t0CC4
-0CC6\t0CC8
-0CCA\t0CCD
-0CD5\t0CD6
-0CDE\t0CDE
-0CE0\t0CE1
-0CE6\t0CEF
-0D02\t0D03
-0D05\t0D0C
-0D0E\t0D10
-0D12\t0D28
-0D2A\t0D39
-0D3E\t0D43
-0D46\t0D48
-0D4A\t0D4D
-0D57\t0D57
-0D60\t0D61
-0D66\t0D6F
-0D82\t0D83
-0D85\t0D96
-0D9A\t0DB1
-0DB3\t0DBB
-0DBD\t0DBD
-0DC0\t0DC6
-0DCA\t0DCA
-0DCF\t0DD4
-0DD6\t0DD6
-0DD8\t0DDF
-0DF2\t0DF4
-0E01\t0E3A
-0E3F\t0E5B
-0E81\t0E82
-0E84\t0E84
-0E87\t0E88
-0E8A\t0E8A
-0E8D\t0E8D
-0E94\t0E97
-0E99\t0E9F
-0EA1\t0EA3
-0EA5\t0EA5
-0EA7\t0EA7
-0EAA\t0EAB
-0EAD\t0EB9
-0EBB\t0EBD
-0EC0\t0EC4
-0EC6\t0EC6
-0EC8\t0ECD
-0ED0\t0ED9
-0EDC\t0EDD
-0F00\t0F47
-0F49\t0F6A
-0F71\t0F8B
-0F90\t0F97
-0F99\t0FBC
-0FBE\t0FCC
-0FCF\t0FCF
-1000\t1021
-1023\t1027
-1029\t102A
-102C\t1032
-1036\t1039
-1040\t1059
-10A0\t10C5
-10D0\t10F8
-10FB\t10FB
-1160\t11A2
-11A8\t11F9
-1200\t1206
-1208\t1246
-1248\t1248
-124A\t124D
-1250\t1256
-1258\t1258
-125A\t125D
-1260\t1286
-1288\t1288
-128A\t128D
-1290\t12AE
-12B0\t12B0
-12B2\t12B5
-12B8\t12BE
-12C0\t12C0
-12C2\t12C5
-12C8\t12CE
-12D0\t12D6
-12D8\t12EE
-12F0\t130E
-1310\t1310
-1312\t1315
-1318\t131E
-1320\t1346
-1348\t135A
-1361\t137C
-13A0\t13F4
-1401\t1676
-1680\t169C
-16A0\t16F0
-1700\t170C
-170E\t1714
-1720\t1736
-1740\t1753
-1760\t176C
-176E\t1770
-1772\t1773
-1780\t17DD
-17E0\t17E9
-17F0\t17F9
-1800\t180E
-1810\t1819
-1820\t1877
-1880\t18A9
-1900\t191C
-1920\t192B
-1930\t193B
-1940\t1940
-1944\t196D
-1970\t1974
-19E0\t19FF
-1D00\t1D6B
-1E00\t1E9B
-1EA0\t1EF9
-1F00\t1F15
-1F18\t1F1D
-1F20\t1F45
-1F48\t1F4D
-1F50\t1F57
-1F59\t1F59
-1F5B\t1F5B
-1F5D\t1F5D
-1F5F\t1F7D
-1F80\t1FB4
-1FB6\t1FC4
-1FC6\t1FD3
-1FD6\t1FDB
-1FDD\t1FEF
-1FF2\t1FF4
-1FF6\t1FFE
-2000\t200F
+0452\t10FC
+1160\t200F
 2011\t2012
 2017\t2017
 201A\t201B
@@ -602,18 +292,12 @@ sub InEastAsianNeutral {
 2034\t2034
 2036\t203A
 203C\t203D
-203F\t2054
-2057\t2057
-205F\t2063
-206A\t2071
+203F\t2071
 2075\t207E
 2080\t2080
-2085\t208E
-20A0\t20A8
+2085\t20A8
 20AA\t20AB
-20AD\t20B1
-20D0\t20EA
-2100\t2102
+20AD\t2102
 2104\t2104
 2106\t2108
 210A\t2112
@@ -621,12 +305,11 @@ sub InEastAsianNeutral {
 2117\t2120
 2123\t2125
 2127\t212A
-212C\t213B
-213D\t214B
+212C\t214E
 2155\t215A
 215F\t215F
 216C\t216F
-217A\t2183
+217A\t2184
 219A\t21B7
 21BA\t21D1
 21D3\t21D3
@@ -661,9 +344,7 @@ sub InEastAsianNeutral {
 22A6\t22BE
 22C0\t2311
 2313\t2328
-232B\t23D0
-2400\t2426
-2440\t244A
+232B\t244A
 24EA\t24EA
 254C\t254F
 2574\t257F
@@ -683,8 +364,7 @@ sub InEastAsianNeutral {
 2607\t2608
 260A\t260D
 2610\t2613
-2616\t2617
-2619\t261B
+2616\t261B
 261D\t261D
 261F\t263F
 2641\t2641
@@ -693,140 +373,96 @@ sub InEastAsianNeutral {
 2666\t2666
 266B\t266B
 266E\t266E
-2670\t267D
-2680\t2691
-26A0\t26A1
-2701\t2704
-2706\t2709
-270C\t2727
-2729\t273C
-273E\t274B
-274D\t274D
-274F\t2752
-2756\t2756
-2758\t275E
-2761\t2775
-2780\t2794
-2798\t27AF
-27B1\t27BE
-27D0\t27E5
+2670\t273C
+273E\t2775
+2780\t27E5
 27F0\t2984
-2987\t2B0D
+2987\t2E1D
 303F\t303F
 4DC0\t4DFF
-FB00\tFB06
-FB13\tFB17
-FB1D\tFB36
-FB38\tFB3C
-FB3E\tFB3E
-FB40\tFB41
-FB43\tFB44
-FB46\tFBB1
-FBD3\tFD3F
-FD50\tFD8F
-FD92\tFDC7
-FDF0\tFDFD
+A700\tA877
+DB7F\tDFFF
+FB00\tFDFD
 FE20\tFE23
-FE70\tFE74
-FE76\tFEFC
-FEFF\tFEFF
+FE70\tFEFF
 FFF9\tFFFC
-10000\t1000B
-1000D\t10026
-10028\t1003A
-1003C\t1003D
-1003F\t1004D
-10050\t1005D
-10080\t100FA
-10100\t10102
-10107\t10133
-10137\t1013F
-10300\t1031E
-10320\t10323
-10330\t1034A
-10380\t1039D
-1039F\t1039F
-10400\t1049D
-104A0\t104A9
-10800\t10805
-10808\t10808
-1080A\t10835
-10837\t10838
-1083C\t1083C
-1083F\t1083F
-1D000\t1D0F5
-1D100\t1D126
-1D12A\t1D1DD
-1D300\t1D356
-1D400\t1D454
-1D456\t1D49C
-1D49E\t1D49F
-1D4A2\t1D4A2
-1D4A5\t1D4A6
-1D4A9\t1D4AC
-1D4AE\t1D4B9
-1D4BB\t1D4BB
-1D4BD\t1D4C3
-1D4C5\t1D505
-1D507\t1D50A
-1D50D\t1D514
-1D516\t1D51C
-1D51E\t1D539
-1D53B\t1D53E
-1D540\t1D544
-1D546\t1D546
-1D54A\t1D550
-1D552\t1D6A3
-1D6A8\t1D7C9
-1D7CE\t1D7FF
-E0001\tE0001
-E0020\tE007F
+10000\t1D7FF
+E0001\tE007F
 END
 }
-sub InEastAsianNarrow {
-    return <<END;
-0020\t007E
-00A2\t00A3
-00A5\t00A6
-00AC\t00AC
-00AF\t00AF
-27E6\t27EB
-2985\t2986
-END
-}
+
 sub InEastAsianWide {
-    return <<END;
-1100\t1159
-115F\t115F
+    return <<'END';
+1100\t115F
 2329\t232A
-2E80\t2E99
-2E9B\t2EF3
-2F00\t2FD5
-2FF0\t2FFB
+2E80\t2FFB
 3001\t303E
-3041\t3096
-3099\t30FF
-3105\t312C
-3131\t318E
-3190\t31B7
-31F0\t321E
-3220\t3243
-3250\t327D
-327F\t32FE
-3300\t33FF
-A000\tA48C
-A490\tA4C6
-F900\tFA2D
-FA30\tFA6A
-FE30\tFE52
-FE54\tFE66
-FE68\tFE6B
-2F800\t2FA1D
+3041\t4DB5
+9FBB\tA4C6
+D7A3\tD7A3
+F900\tFAD9
+FE10\tFE19
+FE30\tFE6B
+2A6D6\t3FFFD
 END
 }
+
 ### END ###
 
 1;
+
+__END__
+
+=head1 NAME
+
+Unicode::EastAsianWidth - East Asian Width properties
+
+=head1 VERSION
+
+This document describes version 1.10 of Unicode::EastAsianWidth,
+released October 14, 2007.
+
+=head1 SYNOPSIS
+
+    use Unicode::EastAsianWidth;
+
+    $_ = chr(0x2010); # HYPHEN, an ambiguous-width character
+
+    /\p{InEastAsianAmbiguous}/; # True
+    /\p{InFullwidth}/;          # False
+
+    {
+        local $Unicode::EastAsianWidth::EastAsian = 1;
+        /\p{InFullwidth}/;      # True (this only works on Perl 5.8+)
+    }
+
+=head1 DESCRIPTION
+
+This module provide user-defined Unicode properties that deal with
+East Asian characters' width status, as specified in
+L<http://www.unicode.org/unicode/reports/tr11/>.
+
+It exports the following functions to the caller's scope, to be
+used by Perl's Unicode matching system: C<InEastAsianFullwidth>,
+C<InEastAsianHalfwidth>, C<InEastAsianAmbiguous>, C<InEastAsianNarrow>
+C<InEastAsianWide>, C<InEastAsianNeutral>.
+
+In accord to TR11 cited above, two additional context-sensitive properties
+are exported: C<InFullwidth> (union of C<Fullwidth> and C<Wide>) and
+C<InHalfwidth> (union of C<Halfwidth>, C<Narrow> and C<Neutral>).
+
+I<Ambiguous> characters are treated by default as part of
+C<InHalfwidth>, but you can modify this behaviour by assigning
+a true value to C<$Unicode::EastAsianWidth::EastAsian>.
+
+=head1 CAVEATS
+
+Setting C<$Unicode::EastAsianWidth::EastAsian> at run-time only
+works on Perl version 5.8 or above.  Perl 5.6 users must use
+a BEGIN block to set it before the C<use> statement:
+
+    BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
+    use Unicode::EastAsianWidth;
 
 =head1 SEE ALSO
 
@@ -835,15 +471,32 @@ L<http://www.unicode.org/unicode/reports/tr11/>
 
 =head1 AUTHORS
 
-Autrijus Tang E<lt>autrijus@autrijus.orgE<gt>
+Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, 2003 by Autrijus Tang E<lt>autrijus@autrijus.orgE<gt>.
+Copyright 2002, 2003, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
-This program is free software; you can redistribute it and/or 
-modify it under the same terms as Perl itself.
+This software is released under the MIT license cited below.
 
-See L<http://www.perl.com/perl/misc/Artistic.html>
+=head2 The "MIT" License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
 
 =cut

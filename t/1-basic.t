@@ -1,21 +1,22 @@
 #!/usr/bin/perl -w
-# $File: //member/autrijus/Unicode-EastAsianWidth/t/1-basic.t $ $Author: autrijus $
-# $Revision: #2 $ $Change: 949 $ $DateTime: 2002/09/20 04:46:49 $
 
 use strict;
 use Test;
 
-BEGIN { plan tests => 4 }
+BEGIN { plan tests => (($] >= 5.008) ? 4 : 3) }
 
-ok (eval { use Unicode::EastAsianWidth; 1 });
+use Unicode::EastAsianWidth;
 
-$_ = chr(0x2588);
-ok (/\p{InEastAsianAmbiguous}/);
-ok (!/\p{InFullwidth}/);
+ok(Unicode::EastAsianWidth->VERSION);
 
-{
+$_ = chr(0x2010);
+ok(/\p{InEastAsianAmbiguous}/);
+ok(!/\p{InFullwidth}/);
+
+if ($] >= 5.008) {
+    no warnings 'once';
     local $Unicode::EastAsianWidth::EastAsian = 1;
-    skip($] < 5.008, /\p{InFullwidth}/);
+    ok(/\p{InFullwidth}/);
 }
 
 __END__
