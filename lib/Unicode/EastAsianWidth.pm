@@ -1,11 +1,14 @@
 package Unicode::EastAsianWidth;
-$Unicode::EastAsianWidth::VERSION = '1.10';
 
 use 5.006;
 use strict;
 use base 'Exporter';
+use vars qw( $VERSION $EastAsian );
 
-our $EastAsian = 0;
+BEGIN {
+    $VERSION = '1.20';
+    $EastAsian = 0;
+};
 
 sub InFullwidth {
     return InEastAsianFullwidth().
@@ -186,9 +189,12 @@ sub InEastAsianAmbiguous {
 266F\t266F
 273D\t273D
 2776\t277F
-F8FF\tF8FF
+E000\tF8FF
 FE00\tFE0F
 FFFD\tFFFD
+E0100\tE01EF
+F0000\tFFFFD
+100000\t10FFFD
 END
 }
 
@@ -381,7 +387,9 @@ sub InEastAsianNeutral {
 303F\t303F
 4DC0\t4DFF
 A700\tA877
-DB7F\tDFFF
+D800\tDB7F
+DB80\tDBFF
+DC00\tDFFF
 FB00\tFDFD
 FE20\tFE23
 FE70\tFEFF
@@ -397,13 +405,19 @@ sub InEastAsianWide {
 2329\t232A
 2E80\t2FFB
 3001\t303E
-3041\t4DB5
-9FBB\tA4C6
-D7A3\tD7A3
+3041\t33FF
+3400\t4DB5
+4E00\t9FBB
+A000\tA4C6
+AC00\tD7A3
 F900\tFAD9
 FE10\tFE19
 FE30\tFE6B
-2A6D6\t3FFFD
+20000\t2A6D6
+2A6D7\t2F7FF
+2F800\t2FA1D
+2FA1E\t2FFFD
+30000\t3FFFD
 END
 }
 
@@ -475,7 +489,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, 2003, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002, 2003, 2007, 2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

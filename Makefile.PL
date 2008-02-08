@@ -66,7 +66,7 @@ sub _build_pm {
     my %categ;
 
     while (<EAW>) {
-        if (/(\w+);(\w+)/) {
+        if (/^(\w+);(\w+)/) {
             my ($code, $categ) = ($1, $2);
             if ($prev_categ ne $categ) {
                 $categ{$ToFullName{$prev_categ}} .= "$prev_code\\t$prev_code_end\n" if $prev_categ;
@@ -75,7 +75,7 @@ sub _build_pm {
             }
             $prev_code_end = $code;
         }
-        elsif (/(\w+)\.\.(\w+);(\w+)/) {
+        elsif (/^(\w+)\.\.(\w+);(\w+)/) {
             $categ{$ToFullName{$prev_categ}} .= "$prev_code\\t$prev_code_end\n" if $prev_categ;
             $categ{$ToFullName{$3}} .= "$1\\t$2\n";
             $prev_categ = '';

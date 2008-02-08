@@ -1,3 +1,23 @@
+[Changes for 1.20 - 2007-02-08]
+
+* Added miss-parsed lines of ranges in EastAsianWidth.txt, affecting
+  all but the last codepoints of these codepoints:
+
+    4E00..9FBB;W
+    AC00..D7A3;W
+    D800..DB7F;N
+    DB80..DBFF;N
+    DC00..DFFF;N
+    E000..F8FF;A
+    20000..2A6D6;W
+    2A6D7..2F7FF;W
+    2FA1E..2FFFD;W
+    30000..3FFFD;W
+    F0000..FFFFD;A
+    100000..10FFFD;A
+
+  Reported by: JJ Jenq
+
 [Changes for 1.10 - 2007-10-14]
 
 * LICENSING CHANGE: This compilation and all individual files in it

@@ -14,26 +14,26 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 7d0a1cebdaafa7b714d0597f05e37900f0c97f75 Changes
+SHA1 ca091e0682b0ef19ee84d199b61bdf09c446a677 Changes
 SHA1 8b1030f09754711d705c19bba6d284160f2eed74 MANIFEST
-SHA1 80f6d00ea61933b7639014432b5f680e30c1d428 META.yml
-SHA1 ca7b1ff7dcd26ba1f568b5fa94bf183f5303aa7e Makefile.PL
+SHA1 211ad1f1eefbeeb9a6faa705485f5e01263af660 META.yml
+SHA1 44894824cc31029565b2c71a6b2f864f261db664 Makefile.PL
 SHA1 a38eb3d89d252a5e07bb7a175a0428173b5483b9 README
-SHA1 78edb89a439463e44c33a72bbee84c54d0dc8aaf inc/Module/Install.pm
-SHA1 8ea4e37df83fd0c1c050be5c8da75545c3828d9b inc/Module/Install/Base.pm
-SHA1 1da6031583c32f0d1ec073b8376102fc51427dcc inc/Module/Install/Can.pm
-SHA1 b779375b90c16af2f31f38a1dd2b5df223c7f2fb inc/Module/Install/Fetch.pm
-SHA1 2054450e1e9c1dd8056362bf4a64ae70d5d71476 inc/Module/Install/Makefile.pm
-SHA1 5d6189b2cad15cf9932a28faafd55130c8247e83 inc/Module/Install/Metadata.pm
-SHA1 02af973fae2ac3531fa6b704574b2b8cb2a08148 inc/Module/Install/Win32.pm
-SHA1 3a2eab96e91cca8d99938cda7791759ae9d97b3a inc/Module/Install/WriteAll.pm
-SHA1 ac285188b09652746742c68683a3d6117d3439f2 lib/Unicode/EastAsianWidth.pm
+SHA1 7e2cfa1b9efe0d502ee57717649c90ba4bd28ba9 inc/Module/Install.pm
+SHA1 6e1392d80a0f239eecd5664f7f21f922cedb9329 inc/Module/Install/Base.pm
+SHA1 f69417fe831d9cc22a78f00a617afadceade4d81 inc/Module/Install/Can.pm
+SHA1 c61d02895330310048bf388881b5e2e064031561 inc/Module/Install/Fetch.pm
+SHA1 54fcbed19232ec959bb17cfb4410599afc7f0779 inc/Module/Install/Makefile.pm
+SHA1 7d3be9b158e37b2b2c22084740099955623b1d56 inc/Module/Install/Metadata.pm
+SHA1 0a8b66180229ba2f9deaea1fedd0aacf7a7ace6b inc/Module/Install/Win32.pm
+SHA1 d3352eb33fe43a5f3ead513f645224fe34d73bc9 inc/Module/Install/WriteAll.pm
+SHA1 7b9039b0fd44dfb18816ee84e458325ff5f3af6b lib/Unicode/EastAsianWidth.pm
 SHA1 41afe2c04bb573b40e283e2b210ed70a47a3f8ba t/0-signature.t
-SHA1 630a6c72dd39691c84f2e46d6fda90fab6e7777a t/1-basic.t
+SHA1 69672a6191b7e15350faf1c7a7e62ad662944c8a t/1-basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.3 (Darwin)
 
-iD8DBQFHEc6StLPdNzw1AaARApJTAJ0RvdmiLidh6L6ciNrnNHPCt84QPQCaAyqj
-uoqySeQ895COc9eJxyNseZw=
-=eOCW
+iD8DBQFHrDAitLPdNzw1AaARArlnAJ99f1Sq2chrLi7UHKvKFoIc77RN7QCghi2w
+J1t4LsrWF7ITTdaDCfVxpKk=
+=uwHP
 -----END PGP SIGNATURE-----
