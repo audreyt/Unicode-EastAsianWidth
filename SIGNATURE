@@ -14,10 +14,10 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 ca091e0682b0ef19ee84d199b61bdf09c446a677 Changes
+SHA1 aaaba4c041295376ffff8b95315922f8157b46f6 Changes
 SHA1 8b1030f09754711d705c19bba6d284160f2eed74 MANIFEST
-SHA1 211ad1f1eefbeeb9a6faa705485f5e01263af660 META.yml
-SHA1 44894824cc31029565b2c71a6b2f864f261db664 Makefile.PL
+SHA1 b3e0235b6b9b00ad8b3a486b32b8b5bf46846162 META.yml
+SHA1 d82aed2fe2d5e2fcaa6e98c84a5498ee1d2360dc Makefile.PL
 SHA1 a38eb3d89d252a5e07bb7a175a0428173b5483b9 README
 SHA1 7e2cfa1b9efe0d502ee57717649c90ba4bd28ba9 inc/Module/Install.pm
 SHA1 6e1392d80a0f239eecd5664f7f21f922cedb9329 inc/Module/Install/Base.pm
@@ -27,13 +27,13 @@ SHA1 54fcbed19232ec959bb17cfb4410599afc7f0779 inc/Module/Install/Makefile.pm
 SHA1 7d3be9b158e37b2b2c22084740099955623b1d56 inc/Module/Install/Metadata.pm
 SHA1 0a8b66180229ba2f9deaea1fedd0aacf7a7ace6b inc/Module/Install/Win32.pm
 SHA1 d3352eb33fe43a5f3ead513f645224fe34d73bc9 inc/Module/Install/WriteAll.pm
-SHA1 7b9039b0fd44dfb18816ee84e458325ff5f3af6b lib/Unicode/EastAsianWidth.pm
+SHA1 fa70cb9ca3126c37c52a161d89a5399ae7c752e0 lib/Unicode/EastAsianWidth.pm
 SHA1 41afe2c04bb573b40e283e2b210ed70a47a3f8ba t/0-signature.t
-SHA1 69672a6191b7e15350faf1c7a7e62ad662944c8a t/1-basic.t
+SHA1 5bbe3de2b00d4803e83d780d3494566dc936b941 t/1-basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.3 (Darwin)
 
-iD8DBQFHrDAitLPdNzw1AaARArlnAJ99f1Sq2chrLi7UHKvKFoIc77RN7QCghi2w
-J1t4LsrWF7ITTdaDCfVxpKk=
-=uwHP
+iD8DBQFHrEOQtLPdNzw1AaARAnk/AKCgduldcFW25n64Z9tNtMAWrK0frgCfQlSe
+JtXwxVxce0N08qNUIgo8HPs=
+=ULLQ
 -----END PGP SIGNATURE-----

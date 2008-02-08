@@ -1,8 +1,17 @@
+[Changes for 1.30 - 2007-02-08]
+
+* Added miss-parsed lines of ranges in EastAsianWidth.txt, affecting
+  all but the first codepoints of codepoint ranges (as mentioned in
+  the changelog entry for version 1.20).
+
+  Reported by: JJ Jenq
+
 [Changes for 1.20 - 2007-02-08]
 
 * Added miss-parsed lines of ranges in EastAsianWidth.txt, affecting
   all but the last codepoints of these codepoints:
 
+    3400..4DB5;W
     4E00..9FBB;W
     AC00..D7A3;W
     D800..DB7F;N

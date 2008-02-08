@@ -16,7 +16,7 @@ no_index:
 provides: 
   Unicode::EastAsianWidth: 
     file: lib/Unicode/EastAsianWidth.pm
-    version: 1.20
+    version: 1.30
 requires: 
   perl: 5.6.0
-version: 1.20
+version: 1.30

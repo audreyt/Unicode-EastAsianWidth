@@ -3,7 +3,7 @@
 use strict;
 use Test;
 
-BEGIN { plan tests => (($] >= 5.008) ? 6 : 5) }
+BEGIN { plan tests => (($] >= 5.008) ? 8 : 7) }
 
 use Unicode::EastAsianWidth;
 
@@ -13,14 +13,18 @@ $_ = chr(0x2010);
 ok(/\p{InEastAsianAmbiguous}/);
 ok(!/\p{InFullwidth}/);
 
-$_ = chr(0x4E00);
-ok(/\p{InFullwidth}/);
-ok(!/\p{InEastAsianAmbiguous}/);
-
 if ($] >= 5.008) {
     no warnings 'once';
     local $Unicode::EastAsianWidth::EastAsian = 1;
     ok(/\p{InFullwidth}/);
 }
+
+$_ = chr(0x4E00);
+ok(/\p{InFullwidth}/);
+ok(!/\p{InEastAsianAmbiguous}/);
+
+$_ = chr(0xFF02);
+ok(/\p{InFullwidth}/);
+ok(!/\p{InEastAsianAmbiguous}/);
 
 __END__

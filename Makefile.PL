@@ -97,7 +97,7 @@ sub _build_pm {
     for my $name (sort values %ToFullName) {
         $out .= << ".";
 sub $name {
-    return <<'END';
+    return <<"END";
 $categ{$name}END
 }
 

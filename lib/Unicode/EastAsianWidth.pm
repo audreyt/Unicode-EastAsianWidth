@@ -6,7 +6,7 @@ use base 'Exporter';
 use vars qw( $VERSION $EastAsian );
 
 BEGIN {
-    $VERSION = '1.20';
+    $VERSION = '1.30';
     $EastAsian = 0;
 };
 
@@ -36,7 +36,7 @@ InHalfwidth
 );
 
 sub InEastAsianAmbiguous {
-    return <<'END';
+    return <<"END";
 00A1\t00A1
 00A4\t00A4
 00A7\t00A8
@@ -199,7 +199,7 @@ END
 }
 
 sub InEastAsianFullwidth {
-    return <<'END';
+    return <<"END";
 3000\t3000
 FF01\tFF60
 FFE0\tFFE6
@@ -207,7 +207,7 @@ END
 }
 
 sub InEastAsianHalfwidth {
-    return <<'END';
+    return <<"END";
 20A9\t20A9
 FF61\tFFDC
 FFE8\tFFEE
@@ -215,7 +215,7 @@ END
 }
 
 sub InEastAsianNarrow {
-    return <<'END';
+    return <<"END";
 0020\t007E
 00A2\t00A3
 00A5\t00A6
@@ -227,7 +227,7 @@ END
 }
 
 sub InEastAsianNeutral {
-    return <<'END';
+    return <<"END";
 0000\t001F
 007F\t00A0
 00A9\t00A9
@@ -400,7 +400,7 @@ END
 }
 
 sub InEastAsianWide {
-    return <<'END';
+    return <<"END";
 1100\t115F
 2329\t232A
 2E80\t2FFB
