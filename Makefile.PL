@@ -1,18 +1,11 @@
 #!/usr/bin/perl
-
 use strict;
-use inc::Module::Install;
+use inc::Module::Package 'Au:dry 1';
 
 my $DefaultVersion  = 'v5.0.0';
 my $DefaultDate     = '2006-02-15';
 
 _build_pm();
-
-name        'Unicode-EastAsianWidth';
-all_from    'lib/Unicode/EastAsianWidth.pm';
-
-auto_provides;
-sign; WriteAll;
 
 sub _build_pm {
     my $file;

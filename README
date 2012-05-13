@@ -8,19 +8,22 @@ VERSION
 SYNOPSIS
         use Unicode::EastAsianWidth;
 
-        $_ = chr(0x2588); # FULL BLOCK, an ambiguous-width character
+        $_ = chr(0x2010); # HYPHEN, an ambiguous-width character
 
-        /\p{InEastAsianAmbiguous}/; # true
-        /\p{InFullwidth}/;          # false
+        /\p{InEastAsianAmbiguous}/; # True
+        /\p{InFullwidth}/;          # False
 
-        {
-            local $Unicode::EastAsianWidth::EastAsian = 1;
-            /\p{InFullwidth}/;      # true; only works on perl 5.8+
-        }
+    To mark ambiguous-width characters as InFullwidth:
+
+        BEGIN { $Unicode::EastAsianWidth::EastAsian = 1; }
+        use Unicode::EastAsianWidth;
+
+        $_ = chr(0x2010); # HYPHEN, an ambiguous-width character
+        /\p{InFullwidth}/;          # True
 
 DESCRIPTION
-    This module provide user-defined Unicode properties that deal with East
-    Asian characters' width status, as specified in
+    This module provide user-defined Unicode properties that deal with width
+    status of East Asian characters, as specified in
     <http://www.unicode.org/unicode/reports/tr11/>.
 
     It exports the following functions to the caller's scope, to be used by
@@ -34,44 +37,28 @@ DESCRIPTION
 
     *Ambiguous* characters are treated by default as part of "InHalfwidth",
     but you can modify this behaviour by assigning a true value to
-    $Unicode::EastAsianWidth::EastAsian.
-
-CAVEATS
-    Setting $Unicode::EastAsianWidth::EastAsian at run-time only works on
-    Perl version 5.8 or above. Perl 5.6 users must use a BEGIN block to set
-    it before the "use" statement:
+    $Unicode::EastAsianWidth::EastAsian at compile time within a "BEGIN"
+    block before loading this module:
 
         BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
         use Unicode::EastAsianWidth;
+
+    Setting $Unicode::EastAsianWidth::EastAsian at run-time used to work on
+    Perl versions between 5.8 and 5.14 due to an implementation detail, but
+    it will no longer work on Perl 5.16 and later versions, and hence is not
+    recommended.
 
 SEE ALSO
     perlunicode, <http://www.unicode.org/unicode/reports/tr11/>
 
 AUTHORS
-    Audrey Tang <cpan@audreyt.org>
+    唐鳳 <cpan@audreyt.org>
 
-COPYRIGHT
-    Copyright 2002, 2003, 2007 by Audrey Tang <cpan@audreyt.org>.
+CC0 1.0 Universal
+    To the extent possible under law, 唐鳳 has waived all copyright and
+    related or neighboring rights to Unicode-EastAsianWidth.
 
-    This software is released under the MIT license cited below.
+    This work is published from Taiwan.
 
-  The "MIT" License
-    Permission is hereby granted, free of charge, to any person obtaining a
-    copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    <http://creativecommons.org/publicdomain/zero/1.0>
 
