@@ -6,7 +6,7 @@ use base 'Exporter';
 use vars qw( $VERSION $EastAsian );
 
 BEGIN {
-    $VERSION = '1.30';
+    $VERSION = '1.31';
     $EastAsian = 0;
 };
 
@@ -472,8 +472,11 @@ a true value to C<$Unicode::EastAsianWidth::EastAsian>.
 =head1 CAVEATS
 
 Setting C<$Unicode::EastAsianWidth::EastAsian> at run-time only
-works on Perl version 5.8 or above.  Perl 5.6 users must use
-a BEGIN block to set it before the C<use> statement:
+works on Perl versions between 5.8 and 5.14, due to an implementation
+detail that enabled this functionality.
+
+For Perl <=5.6 and Perl >=5.16 versions, please use a BEGIN block
+to set the flag before the C<use> statement:
 
     BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
     use Unicode::EastAsianWidth;
