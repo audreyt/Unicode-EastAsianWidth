@@ -467,19 +467,16 @@ C<InHalfwidth> (union of C<Halfwidth>, C<Narrow> and C<Neutral>).
 
 I<Ambiguous> characters are treated by default as part of
 C<InHalfwidth>, but you can modify this behaviour by assigning
-a true value to C<$Unicode::EastAsianWidth::EastAsian>.
-
-=head1 CAVEATS
-
-Setting C<$Unicode::EastAsianWidth::EastAsian> at run-time only
-works on Perl versions between 5.8 and 5.14, due to an implementation
-detail that enabled this functionality.
-
-For Perl <=5.6 and Perl >=5.16 versions, please use a BEGIN block
-to set the flag before the C<use> statement:
+a true value to C<$Unicode::EastAsianWidth::EastAsian> at compile time
+within a C<BEGIN> block before loading this module:
 
     BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
     use Unicode::EastAsianWidth;
+
+Setting C<$Unicode::EastAsianWidth::EastAsian> at run-time used to
+work on Perl versions between 5.8 and 5.14 due to an implementation
+detail, but it will no longer work on Perl 5.16 and later versions,
+and hence is not recommended.
 
 =head1 SEE ALSO
 

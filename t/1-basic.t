@@ -13,7 +13,7 @@ $_ = chr(0x2010);
 ok(/\p{InEastAsianAmbiguous}/);
 ok(!/\p{InFullwidth}/);
 
-if ($] >= 5.008 and $] < 5.016) {
+if ($] >= 5.008 and $] < 5.015) {
     no warnings 'once';
     local $Unicode::EastAsianWidth::EastAsian = 1;
     ok(/\p{InFullwidth}/);
