@@ -27,4 +27,4 @@ resources:
     type: git
     url: git://github.com/audreyt/Unicode-EastAsianWidth.git
     web: http://github.com/audreyt/Unicode-EastAsianWidth/tree
-version: 1.31
+version: 1.32
