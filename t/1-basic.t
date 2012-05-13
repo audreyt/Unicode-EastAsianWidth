@@ -3,7 +3,7 @@
 use strict;
 use Test;
 
-BEGIN { plan tests => (($] >= 5.008) ? 8 : 7) }
+BEGIN { plan tests => (($] >= 5.008 and $] < 5.015) ? 8 : 7) }
 
 use Unicode::EastAsianWidth;
 

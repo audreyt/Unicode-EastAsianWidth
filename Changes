@@ -1,3 +1,7 @@
+[Changes for 1.32 - 2012-05-13]
+
+* Correct unit tests for Perl 5.16+.
+
 [Changes for 1.31 - 2012-05-13]
 
 * Clarify that $EastAsianWidth needs to be set at BEGIN time in

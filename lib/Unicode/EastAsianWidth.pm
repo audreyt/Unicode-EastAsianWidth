@@ -6,7 +6,7 @@ use base 'Exporter';
 use vars qw( $VERSION $EastAsian );
 
 BEGIN {
-    $VERSION = '1.31';
+    $VERSION = '1.32';
     $EastAsian = 0;
 };
 
