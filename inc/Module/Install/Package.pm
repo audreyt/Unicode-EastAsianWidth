@@ -16,7 +16,7 @@ use strict;
 use Module::Install::Base;
 use vars qw'@ISA $VERSION';
 @ISA = 'Module::Install::Base';
-$VERSION = '0.26';
+$VERSION = '0.30';
 
 #-----------------------------------------------------------------------------#
 # XXX BOOTBUGHACK
@@ -54,6 +54,7 @@ my $default_options = {
 # plugin directive:
 my $module_install_plugin;
 my $module_package_plugin;
+my $module_package_dist_plugin;
 # XXX ARGVHACK This @argv thing is a temporary fix for an ugly bug somewhere in the
 # Wikitext module usage.
 my @argv;
@@ -66,6 +67,10 @@ sub module_package_internals_init {
         $module_package_plugin = $self->_load_plugin($plugin_spec);
         $module_package_plugin->mi($module_install_plugin);
         $module_package_plugin->version_check($VERSION);
+    }
+    else {
+        $module_package_dist_plugin = $self->_load_dist_plugin($plugin_spec);
+        $module_package_dist_plugin->mi($module_install_plugin) if ref $module_package_dist_plugin;
     }
     # NOTE - This is the point in time where the body of Makefile.PL runs...
     return;
@@ -80,7 +85,9 @@ sub module_package_internals_init {
             }
             else {
                 $module_install_plugin->_initial();
+                $module_package_dist_plugin->_initial() if ref $module_package_dist_plugin;
                 $module_install_plugin->_main();
+                $module_package_dist_plugin->_main() if ref $module_package_dist_plugin;
             }
         };
         if ($@) {
@@ -101,7 +108,10 @@ sub module_package_internals_init {
                 $module_package_plugin->final;
                 $module_package_plugin->replicate_module_package;
             }
-            : $module_install_plugin->_final;
+            : do {
+                $module_install_plugin->_final;
+                $module_package_dist_plugin->_final() if ref $module_package_dist_plugin;
+            }
     }
 }
 
@@ -123,8 +133,9 @@ Otherwise, please notify the author of this error.
 
 # Find and load the author side plugin:
 sub _load_plugin {
-    my ($self, $spec) = @_;
+    my ($self, $spec, $namespace) = @_;
     $spec ||= '';
+    $namespace ||= 'Module::Package';
     my $version = '';
     $Module::Package::plugin_version = 0;
     if ($spec =~ s/\s+(\S+)\s*//) {
@@ -137,10 +148,20 @@ sub _load_plugin {
         ($spec =~ /^:(\w+)$/) ? ('Plugin', "Plugin::$1") :
         ($spec =~ /^(\S*\w):(\w+)$/) ? ($1, "$1::$2") :
         die "$spec is invalid";
-    $module = "Module::Package::$module";
-    $plugin = "Module::Package::$plugin";
+    $module = "${namespace}::${module}";
+    $plugin = "${namespace}::${plugin}";
     eval "use $module $version (); 1" or die $@;
     return $plugin->new();
+}
+
+# Find and load the user side plugin:
+sub _load_dist_plugin {
+    my ($self, $spec, $namespace) = @_;
+    $spec ||= '';
+    $namespace ||= 'Module::Package::Dist';
+    my $r = eval { $self->_load_plugin($spec, $namespace); };
+    return $r if ref $r;
+    return;
 }
 
 #-----------------------------------------------------------------------------#
@@ -218,6 +239,32 @@ sub _WriteAll {
     $self->WriteAll(@_);
 }
 
+# Base package for Module::Package plugin distributed components.
+package Module::Package::Dist;
+
+sub new {
+    my ($class, %args) = @_;
+    bless \%args, $class;
+}
+
+sub mi {
+    @_ > 1 ? ($_[0]->{mi}=$_[1]) : $_[0]->{mi};
+}
+
+sub _initial {
+    my ($self) = @_;
+}
+
+sub _main {
+    my ($self) = @_;
+}
+
+sub _final {
+    my ($self) = @_;
+}
+
+1;
+
 #-----------------------------------------------------------------------------#
 # Take a guess at the primary .pm and .pod files for 'all_from', and friends.
 # Put them in global magical vars in the main:: namespace.
@@ -256,6 +303,8 @@ sub guess_pm {
         (($pm) = sort @{$array[0]}) or
             die "Can't guess main module";
     }
+    my $pmc = $pm . 'c';
+    $pm = $pmc if -e $pmc;
     $self->set($pm);
 }
 $main::PM = bless [$main::PM ? ($main::PM) : ()], __PACKAGE__;
@@ -263,7 +312,8 @@ $main::PM = bless [$main::PM ? ($main::PM) : ()], __PACKAGE__;
 package Module::Package::POD;
 use overload '""' => sub {
     return $_[0]->[0] if @{$_[0]};
-    (my $pod = "$main::PM") =~ s/\.pm/.pod/ or die;
+    (my $pod = "$main::PM") =~ s/\.pm/.pod/
+        or die "Module::Package's \$main::PM value should end in '.pm'";
     return -e $pod ? $pod : '';
 };
 sub set { $_[0][0] = $_[1] }

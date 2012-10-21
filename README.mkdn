@@ -2,11 +2,6 @@
 
 Unicode::EastAsianWidth - East Asian Width properties
 
-# VERSION
-
-This document describes version 1.10 of Unicode::EastAsianWidth,
-released October 14, 2007.
-
 # SYNOPSIS
 
     use Unicode::EastAsianWidth;
@@ -44,7 +39,7 @@ _Ambiguous_ characters are treated by default as part of
 a true value to `$Unicode::EastAsianWidth::EastAsian` at compile time
 within a `BEGIN` block before loading this module:
 
-    BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
+    BEGIN { $Unicode::EastAsianWidth::EastAsian = 1; }
     use Unicode::EastAsianWidth;
 
 Setting `$Unicode::EastAsianWidth::EastAsian` at run-time used to

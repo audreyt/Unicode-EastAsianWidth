@@ -1,14 +1,27 @@
 #line 1
+# vim: set ts=4 sts=4 sw=4 expandtab smarttab:
+#
+# This file is part of Pod-Markdown
+#
+# This software is copyright (c) 2004 by Marcel Gruenauer.
+#
+# This is free software; you can redistribute it and/or modify it under
+# the same terms as the Perl 5 programming language system itself.
+#
 use 5.008;
 use strict;
 use warnings;
 
 package Pod::Markdown;
+{
+  $Pod::Markdown::VERSION = '1.320';
+}
 BEGIN {
-  $Pod::Markdown::VERSION = '1.110730';
+  $Pod::Markdown::AUTHORITY = 'cpan:RWSTAUNER';
 }
 # ABSTRACT: Convert POD to Markdown
 use parent qw(Pod::Parser);
+use Pod::ParseLink (); # core
 
 sub initialize {
     my $self = shift;
@@ -37,20 +50,16 @@ sub as_markdown {
     if ($args{with_meta}) {
         @header = $parser->_build_markdown_head;
     }
-    join("\n" x 2, @header, @{$lines});
+    join("\n" x 2, @header, @{$lines}) . "\n";
 }
 
 sub _build_markdown_head {
     my $parser    = shift;
     my $data      = $parser->_private;
-    my $paragraph = '';
-    if (defined $data->{Title}) {
-        $paragraph .= sprintf '[[meta title="%s"]]', $data->{Title};
-    }
-    if (defined $data->{Author}) {
-        $paragraph .= "\n" . sprintf '[[meta author="%s"]]', $data->{Author};
-    }
-    return $paragraph;
+    return join "\n",
+        map  { qq![[meta \l$_="$data->{$_}"]]! }
+        grep { defined $data->{$_} }
+        qw( Title Author );
 }
 
 sub _save {
@@ -83,7 +92,23 @@ sub _indent_text {
 sub _clean_text {
     my $text    = $_[1];
     my @trimmed = grep { $_; } split(/\n/, $text);
+
     return wantarray ? @trimmed : join("\n", @trimmed);
+}
+
+sub _escape {
+    local $_ = $_[1];
+
+    # do inline characters first
+    s/([][\\`*_#])/\\$1/g;
+
+    # escape unordered lists and blockquotes
+    s/^([-+*>])/\\$1/mg;
+
+    # escape dots that would wrongfully create numbered lists
+    s/^( (?:>\s+)? \d+ ) (\.\x20)/$1\\$2/xgm;
+
+    return $_;
 }
 
 sub command {
@@ -97,6 +122,7 @@ sub command {
     if ($command =~ m{head(\d)}xms) {
         my $level = $1;
 
+        $paragraph = $parser->_escape($paragraph);
         $paragraph = $parser->interpolate($paragraph, $line_num);
 
         # the headers never are indented
@@ -125,8 +151,9 @@ sub command {
         $data->{Indent}--;
         $data->{searching} = '';
     } elsif ($command =~ m{item}xms) {
-        $paragraph = $parser->interpolate($paragraph, $line_num);
-        $paragraph =~ s{^\h* \* \h*}{}xms;
+        # this strips the POD bullet; the searching=listhead will insert markdown's
+        # FIXME: this does not account for numbered or named lists
+        $paragraph =~ s{^[ \t]* \* [ \t]*}{}xms;
 
         if ($data->{searching} eq 'listpara') {
             $data->{searching} = 'listheadhuddled';
@@ -146,14 +173,49 @@ sub command {
 
 sub verbatim {
     my ($parser, $paragraph) = @_;
+
+    # NOTE: perlpodspec says parsers should expand tabs by default
+    # NOTE: Apparently Pod::Parser does not.  should we?
+    # NOTE: this might be s/^\t/" " x 8/e, but what about tabs inside the para?
+
+    # POD verbatim can start with any number of spaces (or tabs)
+    # markdown should be 4 spaces (or a tab)
+    # so indent any paragraphs so that all lines start with at least 4 spaces
+    my @lines = split /\n/, $paragraph;
+    my $indent = ' ' x 4;
+    foreach my $line ( @lines ){
+        next unless $line =~ m/^( +)/;
+        # find the smallest indentation
+        $indent = $1 if length($1) < length($indent);
+    }
+    if( (my $smallest = length($indent)) < 4 ){
+        # invert to get what needs to be prepended
+        $indent = ' ' x (4 - $smallest);
+        # leave tabs alone
+        $paragraph = join "\n", map { /^\t/ ? $_ : $indent . $_ } @lines;
+    }
+
     $parser->_save($paragraph);
+}
+
+sub _escape_non_code {
+    my ($parser, $text, $ptree) = @_;
+    $text = $parser->_escape($text)
+        unless $ptree->isa('Pod::InteriorSequence') && $ptree->cmd_name eq 'C';
+    return $text;
 }
 
 sub textblock {
     my ($parser, $paragraph, $line_num) = @_;
     my $data = $parser->_private;
 
-    # interpolate the paragraph for embebed sequences
+    # escape markdown characters in text sequences except for inline code
+    $paragraph = join '', $parser->parse_text(
+        { -expand_text => '_escape_non_code' },
+        $paragraph, $line_num
+    )->raw_text;
+
+    # interpolate the paragraph for embedded sequences
     $paragraph = $parser->interpolate($paragraph, $line_num);
 
     # clean the empty lines
@@ -167,6 +229,8 @@ sub textblock {
         my $is_huddled = $1;
         $paragraph = sprintf '%s %s', $data->{ListType}, $paragraph;
         if ($is_huddled) {
+            # FIXME: what does this do?
+            # does this have something to do with preserving an indent?
             $paragraph = $parser->_unsave() . "\n" . $paragraph;
         }
         $data->{searching} = 'listpara';
@@ -179,48 +243,92 @@ sub textblock {
 }
 
 sub interior_sequence {
-    my ($seq_command, $seq_argument, $pod_seq) = @_[1..3];
+    my ($self, $seq_command, $seq_argument, $pod_seq) = @_;
+
+    # nested links are not allowed
+    return sprintf '%s<%s>', $seq_command, $seq_argument
+        if $seq_command eq 'L' && $self->_private->{InsideLink};
+
+    my $i = 2;
     my %interiors = (
-        'I' => sub { return '_' . $_[1] . '_' },      # italic
-        'B' => sub { return '__' . $_[1] . '__' },    # bold
-        'C' => sub { return '`' . $_[1] . '`' },      # monospace
-        'F' => sub { return '`' . $_[1] . '`' },      # system path
-        'S' => sub { return '`' . $_[1] . '`' },      # code
+        'I' => sub { return '_'  . $_[$i] . '_'  },      # italic
+        'B' => sub { return '__' . $_[$i] . '__' },      # bold
+        'C' => sub { return '`'  . $_[$i] . '`'  },      # monospace
+        'F' => sub { return '`'  . $_[$i] . '`'  },      # system path
+        # non-breaking space
+        'S' => sub {
+            (my $s = $_[$i]) =~ s/ /&nbsp;/g;
+            return $s;
+        },
         'E' => sub {
-            my $charname = $_[1];
+            my $charname = $_[$i];
             return '<' if $charname eq 'lt';
             return '>' if $charname eq 'gt';
             return '|' if $charname eq 'verbar';
             return '/' if $charname eq 'sol';
+
+            # convert legacy charnames to more modern ones (see perlpodspec)
+            $charname =~ s/\A([lr])chevron\z/${1}aquo/;
+
+            return "&#$1;" if $charname =~ /^0(x[0-9a-fA-Z]+)$/;
+
+            $charname = oct($charname) if $charname =~ /^0\d+$/;
+
+            return "&#$charname;"      if $charname =~ /^\d+$/;
+
             return "&$charname;";
         },
         'L' => \&_resolv_link,
+        'X' => sub { '' },
+        'Z' => sub { '' },
     );
     if (exists $interiors{$seq_command}) {
         my $code = $interiors{$seq_command};
-        return $code->($seq_command, $seq_argument, $pod_seq);
+        return $code->($self, $seq_command, $seq_argument, $pod_seq);
     } else {
         return sprintf '%s<%s>', $seq_command, $seq_argument;
     }
 }
 
 sub _resolv_link {
-    my ($cmd, $arg) = @_;
-    my $text = $arg =~ s"^(.+?)\|"" ? $1 : '';
+    my ($self, $cmd, $arg) = @_;
 
-    if ($arg =~ m{^http|ftp}xms) { # direct link to a URL
-        $text ||= $arg;
-        return sprintf '[%s](%s)', $text, $arg;
-    } elsif ($arg =~ m{^/(.*)$}) {
-        $text ||= $1;
-        $text = $1;
-        return "[$text](\#pod_$1)";
-    } elsif ($arg =~ m{^(\w+(?:::\w+)*)$}) {
-        $text ||= $1;
-        return "[$text](http://search.cpan.org/perldoc?$1)";
+    local $self->_private->{InsideLink} = 1;
+
+    my ($text, $inferred, $name, $section, $type) =
+      # perlpodspec says formatting codes can occur in all parts of an L<>
+      map { $_ && $self->interpolate($_, 1) }
+      Pod::ParseLink::parselink($arg);
+    my $url = '';
+
+    # TODO: make url prefixes configurable
+
+    if ($type eq 'url') {
+        $url = $name;
+    } elsif ($type eq 'man') {
+        # stolen from Pod::Simple::(X)HTML
+        my ($page, $part) = $name =~ /\A([^(]+)(?:[(](\S*)[)])?/;
+        $url = 'http://man.he.net/man' . ($part || 1) . '/' . ($page || $name);
     } else {
+        if ($name) {
+            $url = 'http://search.cpan.org/perldoc?' . $name;
+        }
+        if ($section){
+            # TODO: sites/pod formatters differ on how to transform the section
+            # TODO: we could do it according to specified url prefix or pod formatter
+            # TODO: or allow a coderef?
+            # TODO: (Pod::Simple::XHTML:idify() for metacpan)
+            # TODO: (Pod::Simple::HTML section_escape/unicode_escape_url/section_url_escape for s.c.o.)
+            $url .= '#' . $section;
+        }
+    }
+
+    # if we don't know how to handle the url just print the pod back out
+    if (!$url) {
         return sprintf '%s<%s>', $cmd, $arg;
     }
+
+    return sprintf '[%s](%s)', ($text || $inferred), $url;
 }
 
 sub format_header {
@@ -232,5 +340,5 @@ sub format_header {
 
 
 __END__
-#line 341
+#line 528
 

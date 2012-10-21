@@ -6,7 +6,7 @@ use base 'Exporter';
 use vars qw( $VERSION $EastAsian );
 
 BEGIN {
-    $VERSION = '1.32';
+    $VERSION = '1.33';
     $EastAsian = 0;
 };
 
@@ -431,11 +431,6 @@ __END__
 
 Unicode::EastAsianWidth - East Asian Width properties
 
-=head1 VERSION
-
-This document describes version 1.10 of Unicode::EastAsianWidth,
-released October 14, 2007.
-
 =head1 SYNOPSIS
 
     use Unicode::EastAsianWidth;
@@ -473,7 +468,7 @@ C<InHalfwidth>, but you can modify this behaviour by assigning
 a true value to C<$Unicode::EastAsianWidth::EastAsian> at compile time
 within a C<BEGIN> block before loading this module:
 
-    BEGIN { $Unicode::EastAsianWidth::EastAsian = 1 }
+    BEGIN { $Unicode::EastAsianWidth::EastAsian = 1; }
     use Unicode::EastAsianWidth;
 
 Setting C<$Unicode::EastAsianWidth::EastAsian> at run-time used to
