@@ -427,6 +427,8 @@ END
 
 __END__
 
+=encoding UTF-8
+
 =head1 NAME
 
 Unicode::EastAsianWidth - East Asian Width properties
