@@ -7,8 +7,8 @@ use Module::Package 'Au:dry 1';
 
 license('cc0');
 
-my $DefaultVersion  = 'v12.0.0';
-my $DefaultDate     = '2019-01-21';
+my $DefaultVersion  = 'v14.0.0';
+my $DefaultDate     = '2021-07-06';
 
 _build_pm();
 
